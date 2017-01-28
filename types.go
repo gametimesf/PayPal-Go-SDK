@@ -347,7 +347,9 @@ type (
 
 	// SenderBatchHeader struct
 	SenderBatchHeader struct {
-		EmailSubject string `json:"email_subject"`
+		EmailSubject  string `json:"email_subject"`
+		SenderBatchID string `json:"sender_batch_id"`
+		RecipientType string `json:"recipient_type"`
 	}
 
 	// ShippingAddress struct
