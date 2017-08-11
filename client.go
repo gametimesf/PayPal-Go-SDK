@@ -71,16 +71,6 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode < 200 || resp.StatusCode > 299 {
-		errResp := &ErrorResponse{Response: resp}
-		data, err = ioutil.ReadAll(resp.Body)
-
-		if err == nil && len(data) > 0 {
-			json.Unmarshal(data, errResp)
-		}
-		return errResp
-	}
-
 	if v != nil {
 		if w, ok := v.(io.Writer); ok {
 			io.Copy(w, resp.Body)
@@ -88,6 +78,16 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 			err = json.NewDecoder(resp.Body).Decode(v)
 			if err != nil {
 				return err
+			}
+
+			if resp.StatusCode < 200 || resp.StatusCode > 299 {
+				errResp := &ErrorResponse{Response: resp}
+				data, err = ioutil.ReadAll(resp.Body)
+
+				if err == nil && len(data) > 0 {
+					json.Unmarshal(data, errResp)
+				}
+				return errResp
 			}
 		}
 	}

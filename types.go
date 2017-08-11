@@ -167,14 +167,26 @@ type (
 		Value    string `json:"value,omitempty"`
 	}
 
-	// ErrorResponse https://developer.paypal.com/docs/api/errors/
+	// Error https://developer.paypal.com/docs/api/errors/
+	ErrorFields struct {
+		Name            string   `json:"name"`
+		DebugID         string   `json:"debug_id"`
+		Message         string   `json:"message"`
+		InformationLink string   `json:"information_link"`
+		Details         []Detail `json:"details"`
+	}
+
+	// ErrorResponse includes the http response and error
 	ErrorResponse struct {
-		Response        *http.Response `json:"-"`
-		Name            string         `json:"name"`
-		DebugID         string         `json:"debug_id"`
-		Message         string         `json:"message"`
-		InformationLink string         `json:"information_link"`
-		Details         string         `json:"details"`
+		Response *http.Response `json:"-"`
+		ErrorFields
+	}
+
+	// Detail https://developer.paypal.com/docs/api/errors/#error-responses
+	Detail struct {
+		Field string
+		Issue string
+		Link  []Link
 	}
 
 	// ExecuteResponse struct
@@ -299,6 +311,7 @@ type (
 		BatchHeader *BatchHeader         `json:"batch_header"`
 		Items       []PayoutItemResponse `json:"items"`
 		Links       []Link               `json:"links"`
+		ErrorFields
 	}
 
 	// RedirectURLs struct
