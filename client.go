@@ -78,7 +78,6 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 		if err == nil && len(data) > 0 {
 			json.Unmarshal(data, errResp)
 		}
-
 		return errResp
 	}
 
